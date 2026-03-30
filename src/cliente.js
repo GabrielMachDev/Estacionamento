@@ -2,21 +2,17 @@ class Cliente {
   constructor(cpfCnpj, nome) {
     this.cpfCnpj = cpfCnpj;
     this.nome = nome;
-    this.placas = new Set();
+    this.placas = [];
   }
 
   adicionarPlaca(placa) {
-    this.placas.add(placa);
-  }
-
-  calcularCusto(registro) {
-    throw new Error("Método abstrato deve ser implementado nas subclasses");
+    this.placas.push(placa);
   }
 }
 
 class Professor extends Cliente {
-  calcularCusto() {
-    return 0; // gratuito
+  constructor(cpf, nome) {
+    super(cpf, nome);
   }
 }
 
@@ -26,13 +22,10 @@ class Estudante extends Cliente {
     this.saldo = saldo;
   }
 
-  calcularCusto() {
-    const custo = Estudante.CUSTO_FIXO_POR_INGRESSO;
-    this.saldo -= custo;
-    return custo;
+  static get CUSTO_FIXO() {
+    return 5; // valor fixo por diária
   }
 }
-Estudante.CUSTO_FIXO_POR_INGRESSO = 20;
 
 class Empresa extends Cliente {
   constructor(cnpj, nome, debito = 0) {
@@ -40,25 +33,27 @@ class Empresa extends Cliente {
     this.debito = debito;
   }
 
-  calcularCusto() {
-    const custo = Empresa.CUSTO_DIARIA;
-    this.debito += custo;
-    return custo;
+  static get VALOR_DIARIA() {
+    return 20;
+  }
+
+  static get MULTA() {
+    return 50;
   }
 }
-Empresa.CUSTO_DIARIA = 70;
 
-class Avulso extends Cliente {
-  calcularCusto(registro) {
-    const horas = (registro.dataSaida - registro.dataEntrada) / (1000 * 60 * 60);
-    if (horas <= 6) {
-      return horas * Avulso.VALOR_HORA;
-    } else {
-      return Avulso.VALOR_DIARIA;
-    }
+class Avulso {
+  constructor(placa) {
+    this.placa = placa;
+  }
+
+  static get VALOR_HORA() {
+    return 10;
+  }
+
+  static get VALOR_DIARIA() {
+    return 60;
   }
 }
-Avulso.VALOR_HORA = 5;
-Avulso.VALOR_DIARIA = 30;
 
-module.exports = { Cliente, Professor, Estudante, Empresa, Avulso };
+module.exports = { Professor, Estudante, Empresa, Avulso };

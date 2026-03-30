@@ -1,9 +1,9 @@
 class TicketEstacionamento {
-  static calcularTarifa(registro) {
-    return registro.cliente.calcularCusto(registro);
+  calcularTarifa(registro) {
+    return registro.valorCobrado;
   }
 
-  static aplicarDesconto(valor, desconto) {
+  aplicarDesconto(valor, desconto) {
     return desconto ? desconto.aplicar(valor) : valor;
   }
 }
