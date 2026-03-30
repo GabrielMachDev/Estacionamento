@@ -1,0 +1,11 @@
+{
+  "name": "estacionamento",
+  "version": "1.0.0",
+  "description": "Sistema de Controle de Estacionamento - Fase 1",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js"
+  },
+  "author": "Gabriel",
+  "license": "MIT"
+}
