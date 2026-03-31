@@ -14,35 +14,35 @@ class RegistroEntradasSaidas {
 
     // Regras de bloqueio
     if (cliente instanceof Estudante && cliente.saldo < 0) {
-      console.log("🚫 Estudante bloqueado por saldo negativo.");
+      console.log("Estudante bloqueado por saldo negativo.");
       return false;
     }
     if (cliente instanceof Empresa && cliente.debito > 0) {
-      console.log("🚫 Empresa inadimplente, entrada negada.");
+      console.log("Empresa inadimplente, entrada negada.");
       return false;
     }
     if (this.clientesBloqueados.has(placa)) {
-      console.log("🚫 Cliente avulso bloqueado por não pagamento.");
+      console.log("Cliente avulso bloqueado por não pagamento.");
       return false;
     }
 
     // Regras específicas
     if (cliente instanceof Professor) {
       if (cliente.placas.length >= 2 && !cliente.placas.includes(placa)) {
-        console.log("🚫 Professores só podem cadastrar até 2 veículos.");
+        console.log("Professores só podem cadastrar até 2 veículos.");
         return false;
       }
       // apenas 1 simultâneo
       const ocupados = [...this.registros.values()].filter(r => r.cliente === cliente && !r.dataSaida);
       if (ocupados.length >= 1) {
-        console.log("🚫 Professor já possui veículo estacionado.");
+        console.log("Professor já possui veículo estacionado.");
         return false;
       }
     }
 
     if (cliente instanceof Estudante) {
       if (cliente.placas.length >= 1 && !cliente.placas.includes(placa)) {
-        console.log("🚫 Estudantes só podem cadastrar 1 veículo.");
+        console.log("Estudantes só podem cadastrar 1 veículo.");
         return false;
       }
     }

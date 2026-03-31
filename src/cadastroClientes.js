@@ -7,7 +7,7 @@ class CadastroClientes {
     if (!this.clientes.has(cliente.cpfCnpj)) {
       this.clientes.set(cliente.cpfCnpj, cliente);
     } else {
-      console.log(`⚠️ Cliente ${cliente.nome} já cadastrado.`);
+      console.log(`Cliente ${cliente.nome} já cadastrado.`);
     }
   }
 
@@ -22,9 +22,9 @@ class CadastroClientes {
   removerCliente(cpfCnpj) {
     if (this.clientes.has(cpfCnpj)) {
       this.clientes.delete(cpfCnpj);
-      console.log(`✅ Cliente ${cpfCnpj} removido.`);
+      console.log(`Cliente ${cpfCnpj} removido.`);
     } else {
-      console.log("❌ Cliente não encontrado.");
+      console.log("Cliente não encontrado.");
     }
   }
 }

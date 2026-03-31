@@ -15,7 +15,7 @@ class InterfaceUsuario {
   }
 
   iniciar() {
-    console.log("\n🎛️ Bem-vindo ao Sistema de Estacionamento!");
+    console.log("\nBem-vindo ao Sistema de Estacionamento!");
     this.menuPrincipal();
   }
 
@@ -38,7 +38,7 @@ class InterfaceUsuario {
         case "5": this.removerPlaca(); break;
         case "6": this.listarClientes(); break;
         case "7": this.encerrar(); break;
-        default: console.log("❌ Opção inválida."); this.menuPrincipal();
+        default: console.log("Opção inválida."); this.menuPrincipal();
       }
     });
   }
@@ -56,7 +56,7 @@ class InterfaceUsuario {
                 placasStr.split(",").forEach(p => cliente.adicionarPlaca(p.trim()));
               }
               this.cadastro.cadastrarCliente(cliente);
-              console.log("✅ Professor cadastrado com sucesso!");
+              console.log("Professor cadastrado com sucesso!");
               this.menuPrincipal();
             });
             return;
@@ -70,7 +70,7 @@ class InterfaceUsuario {
                   placasStr.split(",").forEach(p => cliente.adicionarPlaca(p.trim()));
                 }
                 this.cadastro.cadastrarCliente(cliente);
-                console.log("✅ Estudante cadastrado!");
+                console.log("Estudante cadastrado!");
                 this.menuPrincipal();
               });
             });
@@ -85,14 +85,14 @@ class InterfaceUsuario {
                   placasStr.split(",").forEach(p => cliente.adicionarPlaca(p.trim()));
                 }
                 this.cadastro.cadastrarCliente(cliente);
-                console.log("✅ Empresa cadastrada!");
+                console.log("Empresa cadastrada!");
                 this.menuPrincipal();
               });
             });
             return;
           }
 
-          console.log("❌ Tipo inválido.");
+          console.log("Tipo inválido.");
           this.menuPrincipal();
         });
       });
@@ -103,7 +103,7 @@ class InterfaceUsuario {
     this.rl.question("Placa: ", (placa) => {
       this.rl.question("CPF/CNPJ (ou vazio se avulso): ", (cpfCnpj) => {
         const autorizado = this.movimento.autorizarEntrada(placa, cpfCnpj || null);
-        console.log(autorizado ? "✅ Entrada autorizada!" : "🚫 Entrada negada.");
+        console.log(autorizado ? "Entrada autorizada!" : "Entrada negada.");
         this.menuPrincipal();
       });
     });
@@ -113,9 +113,9 @@ class InterfaceUsuario {
     this.rl.question("Placa: ", (placa) => {
       const registro = this.movimento.registrarSaida(placa);
       if (registro) {
-        console.log(`📤 Saída registrada para ${placa}. Valor: R$ ${registro.valorCobrado.toFixed(2)}`);
+        console.log(`Saída registrada para ${placa}. Valor: R$ ${registro.valorCobrado.toFixed(2)}`);
       } else {
-        console.log("❌ Veículo não encontrado.");
+        console.log("Veículo não encontrado.");
       }
       this.menuPrincipal();
     });
@@ -125,15 +125,15 @@ class InterfaceUsuario {
     this.rl.question("CPF/CNPJ do cliente: ", (cpfCnpj) => {
       const cliente = this.cadastro.buscarCliente(cpfCnpj);
       if (!cliente) {
-        console.log("❌ Cliente não encontrado.");
+        console.log("Cliente não encontrado.");
         return this.menuPrincipal();
       }
       this.rl.question("Placa a remover: ", (placa) => {
         if (cliente.placas.has(placa)) {
           cliente.placas.delete(placa);
-          console.log(`✅ Placa ${placa} removida do cliente ${cliente.nome}.`);
+          console.log(`Placa ${placa} removida do cliente ${cliente.nome}.`);
         } else {
-          console.log("❌ Placa não encontrada para este cliente.");
+          console.log("Placa não encontrada para este cliente.");
         }
         this.menuPrincipal();
       });
@@ -143,9 +143,9 @@ class InterfaceUsuario {
   listarClientes() {
     const clientes = this.cadastro.listarClientes();
     if (clientes.length === 0) {
-      console.log("⚠️ Nenhum cliente cadastrado.");
+      console.log("Nenhum cliente cadastrado.");
     } else {
-      console.log("\n📋 Lista de clientes cadastrados:");
+      console.log("\nLista de clientes cadastrados:");
       clientes.forEach(c => {
         console.log(`- ${c.cpfCnpj} | ${c.nome} | ${c.constructor.name} | Placas: ${[...c.placas].join(', ')}`);
       });
@@ -169,32 +169,32 @@ class InterfaceUsuario {
     this.rl.question("Opção: ", (opcao) => {
       switch (opcao) {
         case "1":
-          console.log(`💰 Total arrecadado: R$ ${this.relatorios.gerarRelatorioArrecadacao().toFixed(2)}`);
+          console.log(`Total arrecadado: R$ ${this.relatorios.gerarRelatorioArrecadacao().toFixed(2)}`);
           break;
         case "2":
           this.rl.question("Data início (YYYY-MM-DD): ", (inicio) => {
             this.rl.question("Data fim (YYYY-MM-DD): ", (fim) => {
               const total = this.relatorios.arrecadacaoPorPeriodo(new Date(inicio), new Date(fim));
-              console.log(`💰 Total arrecadado no período: R$ ${total.toFixed(2)}`);
+              console.log(`Total arrecadado no período: R$ ${total.toFixed(2)}`);
               this.menuRelatorios();
             });
           });
           return;
         case "3":
-          console.log("📊 Arrecadação por categoria:", this.relatorios.arrecadacaoPorCategoria());
+          console.log("Arrecadação por categoria:", this.relatorios.arrecadacaoPorCategoria());
           break;
         case "4":
           this.rl.question("Data início (YYYY-MM-DD): ", (inicio) => {
             this.rl.question("Data fim (YYYY-MM-DD): ", (fim) => {
               const resultado = this.relatorios.arrecadacaoPorPeriodoECategoria(new Date(inicio), new Date(fim));
-              console.log("📊 Arrecadação por período e categoria:", resultado);
+              console.log("Arrecadação por período e categoria:", resultado);
               this.menuRelatorios();
             });
           });
           return;
         case "5":
           this.rl.question("CPF/CNPJ do cliente: ", (cpfCnpj) => {
-            console.log("📋 Situação:", this.relatorios.situacaoCliente(cpfCnpj));
+            console.log("Situação:", this.relatorios.situacaoCliente(cpfCnpj));
             this.menuRelatorios();
           });
           return;
@@ -203,7 +203,7 @@ class InterfaceUsuario {
             this.rl.question("Data início (YYYY-MM-DD): ", (inicio) => {
               this.rl.question("Data fim (YYYY-MM-DD): ", (fim) => {
                 const registros = this.relatorios.registrosClientePorPeriodo(cpfCnpj, new Date(inicio), new Date(fim));
-                console.log("📂 Registros:", registros);
+                console.log("Registros:", registros);
                 this.menuRelatorios();
               });
             });
@@ -213,19 +213,19 @@ class InterfaceUsuario {
           this.rl.question("Data início (YYYY-MM-DD): ", (inicio) => {
             this.rl.question("Data fim (YYYY-MM-DD): ", (fim) => {
               const registros = this.relatorios.registrosAvulsosPorPeriodo(new Date(inicio), new Date(fim));
-              console.log("📂 Registros avulsos:", registros);
+              console.log("Registros avulsos:", registros);
               this.menuRelatorios();
             });
           });
           return;
         case "8":
-          console.log("🚫 Bloqueados:", this.relatorios.listarClientesBloqueados());
+          console.log("Bloqueados:", this.relatorios.listarClientesBloqueados());
           break;
         case "9":
-          console.log("🏆 Top 10:", this.relatorios.top10Frequentes());
+          console.log("Top 10:", this.relatorios.top10Frequentes());
           break;
         case "10": return this.menuPrincipal();
-        default: console.log("❌ Opção inválida.");
+        default: console.log("Opção inválida.");
       }
       this.menuRelatorios();
     });
@@ -234,7 +234,7 @@ class InterfaceUsuario {
   encerrar() {
     this.persistencia.salvarClientes(this.cadastro.listarClientes());
     this.persistencia.salvarRegistros(this.movimento.registros);
-    console.log("💾 Dados salvos. Encerrando...");
+    console.log("Dados salvos. Encerrando...");
     this.rl.close();
   }
 }

@@ -4,7 +4,7 @@ class RelatoriosGerenciais {
     this.clientesBloqueados = clientesBloqueados; // Set de placas bloqueadas
   }
 
-  // 🔹 Valor total arrecadado (todos os registros)
+  // Valor total arrecadado (todos os registros)
   gerarRelatorioArrecadacao() {
     let total = 0;
     for (const r of this.registros.values()) {
@@ -13,7 +13,7 @@ class RelatoriosGerenciais {
     return total;
   }
 
-  // 🔹 Valor total arrecadado por período
+  // Valor total arrecadado por período
   arrecadacaoPorPeriodo(inicio, fim) {
     let total = 0;
     for (const r of this.registros.values()) {
@@ -24,7 +24,7 @@ class RelatoriosGerenciais {
     return total;
   }
 
-  // 🔹 Valor arrecadado por categoria
+  // Valor arrecadado por categoria
   arrecadacaoPorCategoria() {
     const categorias = { Professor: 0, Estudante: 0, Empresa: 0, Avulso: 0 };
     for (const r of this.registros.values()) {
@@ -34,7 +34,7 @@ class RelatoriosGerenciais {
     return categorias;
   }
 
-  // 🔹 Valor arrecadado por período e categoria
+  // Valor arrecadado por período e categoria
   arrecadacaoPorPeriodoECategoria(inicio, fim) {
     const categorias = { Professor: 0, Estudante: 0, Empresa: 0, Avulso: 0 };
     for (const r of this.registros.values()) {
@@ -46,7 +46,7 @@ class RelatoriosGerenciais {
     return categorias;
   }
 
-  // 🔹 Situação de um cliente cadastrado (saldo/débito + veículos estacionados)
+  // Situação de um cliente cadastrado (saldo/débito + veículos estacionados)
   situacaoCliente(cpfCnpj) {
     const registrosCliente = [...this.registros.values()].filter(r => r.cliente && r.cliente.cpfCnpj === cpfCnpj);
     if (registrosCliente.length === 0) return "Cliente não encontrado ou sem registros.";
@@ -66,7 +66,7 @@ class RelatoriosGerenciais {
     };
   }
 
-  // 🔹 Registros de estacionamento de cliente cadastrado por período (todos os veículos vinculados)
+  // Registros de estacionamento de cliente cadastrado por período (todos os veículos vinculados)
   registrosClientePorPeriodo(cpfCnpj, inicio, fim) {
     return [...this.registros.values()].filter(r =>
       r.cliente && r.cliente.cpfCnpj === cpfCnpj &&
@@ -74,19 +74,19 @@ class RelatoriosGerenciais {
     );
   }
 
-  // 🔹 Registros de estacionamento de cliente não cadastrado (avulso) por período
+  // Registros de estacionamento de cliente não cadastrado (avulso) por período
   registrosAvulsosPorPeriodo(inicio, fim) {
     return [...this.registros.values()].filter(r =>
       !r.cliente && r.dataEntrada >= inicio && r.dataEntrada <= fim
     );
   }
 
-  // 🔹 Relação de clientes bloqueados (saldo negativo, inadimplência, avulso que não pagou)
+  // Relação de clientes bloqueados (saldo negativo, inadimplência, avulso que não pagou)
   listarClientesBloqueados() {
     return [...this.clientesBloqueados];
   }
 
-  // 🔹 Top 10 clientes mais frequentes do ano
+  // Top 10 clientes mais frequentes do ano
   top10Frequentes(ano = new Date().getFullYear()) {
     const frequencia = new Map();
     for (const r of this.registros.values()) {

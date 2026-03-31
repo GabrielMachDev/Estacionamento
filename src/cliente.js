@@ -9,16 +9,16 @@ class Cliente {
     if (!this.placas.has(placa)) {
       this.placas.add(placa);
     } else {
-      console.log(`⚠️ Placa ${placa} já cadastrada para ${this.nome}.`);
+      console.log(`Placa ${placa} já cadastrada para ${this.nome}.`);
     }
   }
 
   removerPlaca(placa) {
     if (this.placas.has(placa)) {
       this.placas.delete(placa);
-      console.log(`✅ Placa ${placa} removida de ${this.nome}.`);
+      console.log(`Placa ${placa} removida de ${this.nome}.`);
     } else {
-      console.log(`❌ Placa ${placa} não encontrada para ${this.nome}.`);
+      console.log(`Placa ${placa} não encontrada para ${this.nome}.`);
     }
   }
 

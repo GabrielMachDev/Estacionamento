@@ -4,7 +4,7 @@ const { RelatoriosGerenciais } = require('./relatoriosGerenciais');
 const { PersistenciaCSV } = require('./persistenciaCSV');
 const { InterfaceUsuario } = require('./interfaceUsuario');
 
-// ✅ Defina os caminhos dos arquivos CSV como strings
+// Defina os caminhos dos arquivos CSV como strings
 const persistencia = new PersistenciaCSV(
   './data/clientes.csv',
   './data/registros.csv'
@@ -22,6 +22,6 @@ registros.forEach(r => movimento.registros.set(r.placa, r));
 const relatorios = new RelatoriosGerenciais(movimento.registros, movimento.clientesBloqueados);
 
 // Iniciar interface
-console.log("📦 Sistema de Estacionamento iniciado!\n");
+console.log("Sistema de Estacionamento iniciado!\n");
 const ui = new InterfaceUsuario(cadastro, movimento, relatorios, persistencia);
 ui.iniciar();

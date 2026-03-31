@@ -20,9 +20,9 @@ class PersistenciaCSV {
     for (const linha of linhas) {
       const [cpfCnpj, nome, campo3, tipo, placasStr] = linha.split(',');
 
-      // ⚠️ Validação: se faltar dados, ignora a linha
+      // Validação: se faltar dados, ignora a linha
       if (!cpfCnpj || !nome || !tipo) {
-        console.log(`⚠️ Linha inválida no CSV ignorada: ${linha}`);
+        console.log(`Linha inválida no CSV ignorada: ${linha}`);
         continue;
       }
 
@@ -34,7 +34,7 @@ class PersistenciaCSV {
       } else if (tipo === 'Empresa') {
         cliente = new Empresa(cpfCnpj, nome, parseFloat(campo3) || 0);
       } else {
-        console.log(`⚠️ Tipo desconhecido no CSV: ${tipo}`);
+        console.log(`Tipo desconhecido no CSV: ${tipo}`);
         continue;
       }
 
@@ -52,7 +52,7 @@ class PersistenciaCSV {
     const linhas = [];
 
     for (const c of clientes) {
-      if (!c || !c.cpfCnpj) continue; // ⚠️ Proteção extra
+      if (!c || !c.cpfCnpj) continue; // Proteção extra
 
       let campo3 = '';
       const tipo = c.constructor.name;
@@ -65,7 +65,7 @@ class PersistenciaCSV {
         campo3 = c.debito ?? 0;
       }
 
-      // ✅ Corrigido: transformar Set em array antes de join
+      // Corrigido: transformar Set em array antes de join
       const placas = c.placas ? [...c.placas].join(',') : '';
       linhas.push(`${c.cpfCnpj},${c.nome},${campo3},${tipo},${placas}`);
     }
@@ -85,7 +85,7 @@ class PersistenciaCSV {
     for (const linha of linhas) {
       const [placa, cpfCnpj, dataEntrada, dataSaida, valorCobrado] = linha.split(',');
       if (!placa || !dataEntrada) {
-        console.log(`⚠️ Linha inválida no CSV de registros ignorada: ${linha}`);
+        console.log(`Linha inválida no CSV de registros ignorada: ${linha}`);
         continue;
       }
 
@@ -109,7 +109,7 @@ class PersistenciaCSV {
     const linhas = [];
 
     for (const r of registros.values()) {
-      if (!r || !r.placa) continue; // ⚠️ Proteção extra
+      if (!r || !r.placa) continue; // Proteção extra
 
       const cpfCnpj = r.cliente ? r.cliente.cpfCnpj : '';
       const dataEntrada = r.dataEntrada.toISOString();
