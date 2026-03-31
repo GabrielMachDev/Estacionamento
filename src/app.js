@@ -1,67 +1,27 @@
 const { CadastroClientes } = require('./cadastroClientes');
 const { RegistroEntradasSaidas } = require('./registroEntradasSaidas');
 const { RelatoriosGerenciais } = require('./relatoriosGerenciais');
-const { Professor, Estudante, Empresa } = require('./cliente');
+const { PersistenciaCSV } = require('./persistenciaCSV');
+const { InterfaceUsuario } = require('./interfaceUsuario');
 
-function main() {
-  console.log("Sistema de Estacionamento iniciado!\n");
+// ✅ Defina os caminhos dos arquivos CSV como strings
+const persistencia = new PersistenciaCSV(
+  './data/clientes.csv',
+  './data/registros.csv'
+);
 
-  const cadastro = new CadastroClientes();
-  const movimento = new RegistroEntradasSaidas(cadastro);
+// Carregar dados existentes
+const clientes = persistencia.carregarClientes();
+const cadastro = new CadastroClientes();
+clientes.forEach(c => cadastro.cadastrarCliente(c));
 
-  // Cadastro de clientes
-  const prof = new Professor("12345678901", "Bernardo Copstein");
-  prof.adicionarPlaca("ABC1D23");
-  cadastro.cadastrarCliente(prof);
+const registros = persistencia.carregarRegistros(clientes);
+const movimento = new RegistroEntradasSaidas(cadastro);
+registros.forEach(r => movimento.registros.set(r.placa, r));
 
-  const est = new Estudante("23456789012", "Gabriel Mach", 20); // saldo inicial
-  est.adicionarPlaca("DEF2E34");
-  cadastro.cadastrarCliente(est);
+const relatorios = new RelatoriosGerenciais(movimento.registros, movimento.clientesBloqueados);
 
-  const emp = new Empresa("56789012345", "Tecnopuc S.A.", 0); // sem débito inicial
-  emp.adicionarPlaca("STU7J89");
-  cadastro.cadastrarCliente(emp);
-
-  // Entradas
-  console.log("Tentando autorizar entradas...");
-  movimento.autorizarEntrada("ABC1D23", "12345678901"); // Professor
-  movimento.autorizarEntrada("DEF2E34", "23456789012"); // Estudante
-  movimento.autorizarEntrada("STU7J89", "56789012345"); // Empresa
-
-  // Saídas simuladas
-  setTimeout(() => {
-    console.log("\nProcessando saídas...\n");
-
-    const saidaProf = movimento.registrarSaida("ABC1D23");
-    const saidaEst = movimento.registrarSaida("DEF2E34");
-    const saidaEmp = movimento.registrarSaida("STU7J89");
-
-    const formatarData = d => d.toLocaleString("pt-BR");
-
-    const imprimirRegistro = (registro, tipo) => {
-      console.log(`Saída registrada:\n- ${tipo} (${registro.placa})`);
-      console.log(`  Entrada: ${formatarData(registro.dataEntrada)}`);
-      console.log(`  Saída:   ${formatarData(registro.dataSaida)}`);
-      console.log(`  Valor cobrado: R$ ${(registro.valorCobrado ?? 0).toFixed(2)}`);
-      console.log(`  Desconto aplicado: ${registro.descontoAplicado}\n`);
-    };
-
-    imprimirRegistro(saidaProf, "Professor");
-    imprimirRegistro(saidaEst, "Estudante");
-    imprimirRegistro(saidaEmp, "Empresa");
-
-    // Agora o relatório recebe também os bloqueados
-    const relatorios = new RelatoriosGerenciais(movimento.registros, movimento.clientesBloqueados);
-
-    console.log("Relatório de Arrecadação:");
-    console.log(`Total arrecadado no período: R$ ${relatorios.gerarRelatorioArrecadacao().toFixed(2)}`);
-
-    console.log("\nClientes bloqueados:");
-    console.log(relatorios.listarClientesBloqueados());
-
-    console.log("\nTop 10 clientes mais frequentes:");
-    console.log(relatorios.top10Frequentes());
-  }, 2000);
-}
-
-main();
+// Iniciar interface
+console.log("📦 Sistema de Estacionamento iniciado!\n");
+const ui = new InterfaceUsuario(cadastro, movimento, relatorios, persistencia);
+ui.iniciar();
