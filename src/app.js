@@ -1,27 +1,30 @@
+const path = require('path');
 const { CadastroClientes } = require('./cadastroClientes');
 const { RegistroEntradasSaidas } = require('./registroEntradasSaidas');
 const { RelatoriosGerenciais } = require('./relatoriosGerenciais');
 const { PersistenciaCSV } = require('./persistenciaCSV');
 const { InterfaceUsuario } = require('./interfaceUsuario');
 
-// Defina os caminhos dos arquivos CSV como strings
-const persistencia = new PersistenciaCSV(
-  './data/clientes.csv',
-  './data/registros.csv'
-);
+// Inicialização do sistema:
+// - Define os arquivos CSV de clientes e registros usados pelo aplicativo
+// - Carrega dados persistidos antes de iniciar a interface
+// - Cria os serviços de cadastro, movimento e relatórios que orquestram o fluxo
 
-// Carregar dados existentes
-const clientes = persistencia.carregarClientes();
+const clientesFile = path.join(__dirname, '../data/clientes.csv');
+const registrosFile = path.join(__dirname, '../data/registros.csv');
+
+const persistencia = new PersistenciaCSV(clientesFile, registrosFile);
+
 const cadastro = new CadastroClientes();
+const clientes = persistencia.carregarClientes();
 clientes.forEach(c => cadastro.cadastrarCliente(c));
 
-const registros = persistencia.carregarRegistros(clientes);
 const movimento = new RegistroEntradasSaidas(cadastro);
-registros.forEach(r => movimento.registros.set(r.placa, r));
+const registros = persistencia.carregarRegistros(clientes);
+movimento.restaurarRegistros(registros);
 
 const relatorios = new RelatoriosGerenciais(movimento.registros, movimento.clientesBloqueados);
 
-// Iniciar interface
-console.log("Sistema de Estacionamento iniciado!\n");
+console.log('Sistema de Estacionamento iniciado!\n');
 const ui = new InterfaceUsuario(cadastro, movimento, relatorios, persistencia);
 ui.iniciar();

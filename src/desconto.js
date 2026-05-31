@@ -1,12 +1,12 @@
 class Desconto {
   aplicar(valor) {
-    throw new Error("Método abstrato");
+    throw new Error('Método abstrato');
   }
 }
 
 class ClienteFrequente extends Desconto {
   aplicar(valor) {
-    return valor * 0.8; // 20% desconto
+    return valor * 0.8; // 20% de desconto
   }
 }
 
